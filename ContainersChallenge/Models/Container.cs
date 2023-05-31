@@ -30,7 +30,7 @@ namespace ContainersChallenge.Models
 
         [Required]
         [StringLength(10)]
-        public string? Situacap { get; set; }
+        public string? Situacao { get; set; }
 
         [Required]
         [StringLength(20)]

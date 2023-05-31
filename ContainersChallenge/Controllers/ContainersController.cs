@@ -8,7 +8,7 @@ using Container = ContainersChallenge.Models.Container;
 
 namespace ContainersChallenge.Controllers
 {
-    [Route("[containers]")]
+    [Route("containers")]
     [ApiController]
     public class ContainersController : ControllerBase
     {
@@ -22,7 +22,15 @@ namespace ContainersChallenge.Controllers
         [HttpGet("movimentacoes")]
         public ActionResult<IEnumerable<Container>> GetCategoriesProducts()
         {
-            return _context.Containers.Include(p => p.Movimentacoes).Where(c => c.ContainerId <= 5).ToList();
+            try
+            {
+                return _context.Containers.Include(p => p.Movimentacoes).Where(c => c.ContainerId <= 5).ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ocorreu um problema ao tratar sua solicitação");
+            }
         }
 
         [HttpGet]
@@ -39,7 +47,7 @@ namespace ContainersChallenge.Controllers
             }
         }
 
-        [HttpGet("{id.int}", Name = "ObterContainer")]
+        [HttpGet("{id:int}", Name = "ObterContainer")]
         public ActionResult<Container> Get(int id)
         {
             var container = _context.Containers.FirstOrDefault(p => p.ContainerId == id);

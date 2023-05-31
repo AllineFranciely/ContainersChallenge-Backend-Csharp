@@ -6,20 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContainersChallenge.Controllers
 {
-    [Route("[movimentacoes]")]
+    [Route("movimentacoes")]
     [ApiController]
     public class MovimentacoesController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public MovimentacoesController(AppDbContext _context)
+        public MovimentacoesController(AppDbContext context)
         {
-            _context = _context;
+            _context = context;
         }
         [HttpGet]
         public ActionResult<IEnumerable<Movimentacao>> Get()
         {
-            var movimentacoes = _context.Movimentacoes.Take(10).ToList();
+            var movimentacoes = _context.Movimentacoes.AsNoTracking().ToList();
             if (movimentacoes is null)
             {
                 return NotFound("Movimentações não encontradas");
@@ -27,7 +27,7 @@ namespace ContainersChallenge.Controllers
             return movimentacoes;
         }
 
-        [HttpGet("{id.int}", Name = "ObterMovimentacao")]
+        [HttpGet("{id:int}", Name = "ObterMovimentacao")]
         public ActionResult<Movimentacao> Get(int id)
         {
             var movimentacao = _context.Movimentacoes.FirstOrDefault(p => p.MovimentacaoId == id);
